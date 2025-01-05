@@ -1,172 +1,168 @@
-# User Management Service
+# Quiz App - Microservices Architecture
 
-The **User Management Service** is a backend microservice designed to handle user authentication, authorization, and role-based access control (RBAC). It provides APIs for user management, role assignments, and permission handling using Spring Boot and JWT.
+## Table of Contents
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Services](#services)
+  - [User Management Service](#user-management-service)
+  - [Quiz Management Service](#quiz-management-service)
+  - [Result Management Service](#result-management-service)
+- [Technologies Used](#technologies-used)
+- [Setup and Installation](#setup-and-installation)
+- [APIs and Endpoints](#apis-and-endpoints)
+  - [User Management Service Endpoints](#user-management-service-endpoints)
+  - [Quiz Management Service Endpoints](#quiz-management-service-endpoints)
+  - [Result Management Service Endpoints](#result-management-service-endpoints)
+- [Testing the Application](#testing-the-application)
+- [License](#license)
 
 ---
 
-## Features
+## Overview
 
-- User Authentication with JWT tokens.
-- Role-Based Access Control (RBAC).
-- Secure and scalable architecture following REST standards.
-- Modular design for ease of maintenance.
-- Integration with MySQL database for persistence.
-- Uses ModelMapper for POJO-DTO mapping.
-- Built-in token validation and expiration.
+The **Quiz App** is a microservices-based application designed to manage quizzes, user authentication, and results. It consists of three main services:
+
+1. **User Management Service**: Handles user registration, authentication, and role-based access control.
+2. **Quiz Management Service**: Manages quizzes, including creating, updating, and fetching quiz questions.
+3. **Result Management Service**: Manages quiz results and scoring for users.
+
+This architecture promotes scalability, modularity, and ease of maintenance.
+
+---
+
+## Architecture
+
+The system follows a microservices architecture, with each service handling specific responsibilities. The services communicate via RESTful APIs.
+
+### Key Features:
+- Spring Boot for backend services.
+- Secure authentication using Spring Security and JWT.
+- MySQL as the database.
+- Dockerized for deployment.
+
+---
+
+## Services
+
+### 1. User Management Service
+- **Purpose**: Manages user accounts, authentication, and roles (Admin, User).
+- **Features**:
+  - Register and login users.
+  - Role-based access control.
+  - JWT token generation for secure API access.
+
+### 2. Quiz Management Service
+- **Purpose**: Handles quiz creation, updates, and retrieval.
+- **Features**:
+  - CRUD operations for quizzes.
+  - Assign quizzes to users.
+
+### 3. Result Management Service
+- **Purpose**: Tracks and manages quiz results.
+- **Features**:
+  - Store and retrieve quiz scores.
+  - Calculate and display user performance.
 
 ---
 
 ## Technologies Used
 
-- **Java**: Backend programming language.
-- **Spring Boot**: Framework for building RESTful APIs.
-- **JWT (JSON Web Tokens)**: Authentication and authorization.
-- **MySQL**: Relational database for user and role data.
-- **Lombok**: Reduces boilerplate code.
-- **ModelMapper**: Simplifies object mapping.
-- **Maven**: Dependency management and build tool.
+- **Backend**: Java, Spring Boot, Spring Security, Spring Data JPA
+- **Authentication**: JWT
+- **Database**: MySQL
+- **Dependency Management**: Maven
+- **Logging**: SLF4J, Logback
+- **Testing**: JUnit
+- **API Documentation**: Swagger
+- **Deployment**: Docker
 
 ---
 
-## Project Structure
-
-```
-user-management-service
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   ├── com.quizapp.user_management_service
-│   │   │   │   ├── config
-│   │   │   │   │   └── SecurityConfig.java
-│   │   │   │   ├── controller
-│   │   │   │   │   ├── AuthController.java
-│   │   │   │   │   ├── UserController.java
-│   │   │   │   │   └── AdminController.java
-│   │   │   │   ├── dto
-│   │   │   │   │   └── (Request and Response DTOs)
-│   │   │   │   ├── entity
-│   │   │   │   │   ├── User.java
-│   │   │   │   │   ├── Role.java
-│   │   │   │   │   └── Permission.java
-│   │   │   │   ├── repository
-│   │   │   │   │   ├── UserRepository.java
-│   │   │   │   │   ├── RoleRepository.java
-│   │   │   │   │   └── PermissionRepository.java
-│   │   │   │   ├── service
-│   │   │   │   │   ├── UserService.java
-│   │   │   │   │   ├── AuthService.java
-│   │   │   │   │   ├── AdminService.java
-│   │   │   │   │   └── impl
-│   │   │   │   │       ├── UserServiceImpl.java
-│   │   │   │   │       ├── AuthServiceImpl.java
-│   │   │   │   │       └── AdminServiceImpl.java
-│   │   │   │   └── util
-│   │   │   │       ├── JWTUtil.java
-│   │   │   │       ├── MapperUtil.java
-│   │   │   │       └── PasswordUtil.java
-│   │   └── resources
-│   │       ├── application.properties
-│   │       └── data.sql
-├── pom.xml
-└── README.md
-```
-
----
-
-## How to Run
-
-### Prerequisites
-
-- **Java 17 or higher**
-- **Maven**
-- **MySQL Database**
-
-### Steps
+## Setup and Installation
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd user-management-service
+   git clone https://github.com/your-repo/quiz-app.git
+   cd quiz-app
    ```
 
-2. Configure the `application.properties` file:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/user_management_db
-   spring.datasource.username=<your-username>
-   spring.datasource.password=<your-password>
-   spring.jpa.hibernate.ddl-auto=update
+2. Configure databases for each service:
+   - Create MySQL databases for `user_management`, `quiz_management`, and `result_management`.
+   - Update the `application.properties` or `application.yml` files with database credentials.
 
-   jwt.secret=mySuperSecretKeyForJWTGeneration12345
-   jwt.expiration=36000000
-   ```
-
-3. Build the project using Maven:
+3. Install dependencies:
    ```bash
    mvn clean install
    ```
 
-4. Run the application:
+4. Start each service:
    ```bash
+   cd user-management-service
    mvn spring-boot:run
    ```
+   Repeat for `quiz-management-service` and `result-management-service`.
 
-5. The application will be available at:
+5. Use Postman or Swagger to test APIs.
+
+6. (Optional) Build Docker images:
+   ```bash
+   docker-compose up --build
    ```
-   http://localhost:8080
-   ```
 
 ---
 
-## API Endpoints
+## APIs and Endpoints
 
-### Authentication
+### User Management Service Endpoints
 
-- **POST** `/auth/login` - Authenticate user and return JWT.
-
-### User Management
-
-- **POST** `/users` - Create a new user.
-- **GET** `/users/{id}` - Retrieve user by ID.
-- **PUT** `/users/{id}` - Update user information.
-- **DELETE** `/users/{id}` - Delete user.
-
-### Role Management
-
-- **POST** `/roles` - Create a new role.
-- **GET** `/roles/{id}` - Retrieve role by ID.
-- **PUT** `/roles/{id}` - Update role.
-- **DELETE** `/roles/{id}` - Delete role.
+| Method | Endpoint                  | Description                    |
+|--------|---------------------------|--------------------------------|
+| POST   | `/api/auth/register`      | Register a new user           |
+| POST   | `/api/auth/login`         | Login and get a JWT token     |
+| GET    | `/api/users`              | Fetch all users (Admin only)  |
+| PUT    | `/api/users/{id}`         | Update user details           |
+| DELETE | `/api/users/{id}`         | Delete a user                 |
 
 ---
 
-## Tools & Libraries
+### Quiz Management Service Endpoints
 
-- **Spring Security**: To secure the APIs.
-- **JWT**: For token generation and validation.
-- **Lombok**: For reducing boilerplate code.
-- **ModelMapper**: For object mapping.
+| Method | Endpoint                  | Description                      |
+|--------|---------------------------|----------------------------------|
+| POST   | `/api/quizzes`            | Create a new quiz (Admin only)  |
+| GET    | `/api/quizzes`            | Get all quizzes                 |
+| GET    | `/api/quizzes/{id}`       | Get a specific quiz             |
+| PUT    | `/api/quizzes/{id}`       | Update a quiz (Admin only)      |
+| DELETE | `/api/quizzes/{id}`       | Delete a quiz (Admin only)      |
 
 ---
 
-## Future Enhancements
+### Result Management Service Endpoints
 
-- Add email verification.
-- Implement OAuth2 for third-party authentication.
-- Add support for logging and monitoring.
-- API rate limiting for enhanced security.
+| Method | Endpoint                  | Description                     |
+|--------|---------------------------|---------------------------------|
+| POST   | `/api/results`            | Submit quiz results            |
+| GET    | `/api/results/user/{id}`  | Fetch results for a user       |
+| GET    | `/api/results/quiz/{id}`  | Fetch results for a quiz       |
+
+---
+
+## Testing the Application
+
+### Using Postman
+
+1. Import the Postman collection provided in the repository (if available).
+2. Test the endpoints by sending appropriate requests (e.g., register a user, create a quiz, submit results).
+3. Include the JWT token in the `Authorization` header for secured endpoints.
+
+### Using Swagger
+
+1. Start the services.
+2. Open the Swagger UI (e.g., `http://localhost:8080/swagger-ui.html`).
+3. Explore and test the available APIs.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License.
-
----
-
-## Contact
-
-For any queries or support, please contact:
-
-- **Name**: Shaik Ameer
-- **Linkedin**: [ameer-shaik](https://www.linkedin.com/in/ameer-shaikk/)
-- **Email**: [shaikameerjann@gmail.com](shaikameerjann@gmail.com)
+This project is licensed under the MIT License. See `LICENSE` for more details.
